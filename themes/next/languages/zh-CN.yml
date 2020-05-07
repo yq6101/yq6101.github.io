@@ -1,4 +1,4 @@
----
+﻿---
 name: 简体中文
 title:
   archive: 归档
@@ -15,7 +15,6 @@ menu:
   schedule: 日程表
   sitemap: 站点地图
   commonweal: 公益 404
-  resources: 资源
 sidebar:
   overview: 站点概览
   toc: 文章目录
