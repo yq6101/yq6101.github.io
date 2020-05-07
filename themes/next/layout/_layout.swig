@@ -12,13 +12,12 @@
 <body itemscope itemtype="http://schema.org/WebPage">
   <div class="container{%- if theme.motion.enable %} use-motion{%- endif %}">
     <div class="headband"></div>
-
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+   <header class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner">{% include '_partials/header/index.swig' %}</div>
     </header>
-
+    
     {{ partial('_partials/widgets.swig', {}, {cache: theme.cache.enable}) }}
-
+    
     <main class="main">
       <div class="main-inner">
         <div class="content-wrap">
@@ -33,7 +32,7 @@
         {%- endif %}
       </div>
     </main>
-
+    
     <footer class="footer">
       <div class="footer-inner">
         {% include '_partials/languages.swig' %}
