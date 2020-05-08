@@ -22,12 +22,12 @@
     var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="普普通通的程序猿">
+  <meta name="description" content="幺零二四程序猿">
 <meta property="og:type" content="website">
-<meta property="og:title" content="空间站">
+<meta property="og:title" content="幺零二四">
 <meta property="og:url" content="http://yoursite.com/index.html">
-<meta property="og:site_name" content="空间站">
-<meta property="og:description" content="普普通通的程序猿">
+<meta property="og:site_name" content="幺零二四">
+<meta property="og:description" content="幺零二四程序猿">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:author" content="殷勤">
 <meta name="twitter:card" content="summary">
@@ -45,7 +45,7 @@
   };
 </script>
 
-  <title>空间站</title>
+  <title>幺零二四</title>
   
 
 
@@ -95,7 +95,7 @@
 
     <a href="/" class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
-      <h1 class="site-title">空间站</h1>
+      <h1 class="site-title">幺零二四</h1>
       <span class="logo-line-after"><i></i></span>
     </a>
       <p class="site-subtitle" itemprop="description">记录有趣的事情</p>
@@ -127,6 +127,11 @@
     <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
 
   </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a>
+
+  </li>
   </ul>
 </nav>
 
@@ -154,16 +159,85 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/08/Oracle%E8%A1%A8%E7%A9%BA%E9%97%B4%E6%89%A9%E5%AE%B9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="殷勤">
+      <meta itemprop="description" content="幺零二四程序猿">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="幺零二四">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/05/08/Oracle%E8%A1%A8%E7%A9%BA%E9%97%B4%E6%89%A9%E5%AE%B9/" class="post-title-link" itemprop="url">Oracle表空间扩容</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-05-08 15:41:55" itemprop="dateCreated datePublished" datetime="2020-05-08T15:41:55+08:00">2020-05-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%A0%88/" itemprop="url" rel="index"><span itemprop="name">技术栈</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="1、表空间容量查询"><a href="#1、表空间容量查询" class="headerlink" title="1、表空间容量查询"></a>1、表空间容量查询</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> TABLESPACE_NAME <span class="string">"表空间"</span>,</span><br><span class="line">       To_char(<span class="keyword">Round</span>(<span class="keyword">BYTES</span> / <span class="number">1024</span>, <span class="number">2</span>), <span class="string">'99990.00'</span>)</span><br><span class="line">       || <span class="string">''</span>           <span class="string">"实有"</span>,</span><br><span class="line">       To_char(<span class="keyword">Round</span>(FREE / <span class="number">1024</span>, <span class="number">2</span>), <span class="string">'99990.00'</span>)</span><br><span class="line">       || <span class="string">'G'</span>          <span class="string">"现有"</span>,</span><br><span class="line">       To_char(<span class="keyword">Round</span>(( <span class="keyword">BYTES</span> - FREE ) / <span class="number">1024</span>, <span class="number">2</span>), <span class="string">'99990.00'</span>)</span><br><span class="line">       || <span class="string">'G'</span>          <span class="string">"使用"</span>,</span><br><span class="line">       To_char(<span class="keyword">Round</span>(<span class="number">10000</span> * USED / <span class="keyword">BYTES</span>) / <span class="number">100</span>, <span class="string">'99990.00'</span>)</span><br><span class="line">       || <span class="string">'%'</span>          <span class="string">"比例"</span></span><br><span class="line"><span class="keyword">FROM</span>   (<span class="keyword">SELECT</span> A.TABLESPACE_NAME                             TABLESPACE_NAME,</span><br><span class="line">               <span class="keyword">Floor</span>(A.BYTES / ( <span class="number">1024</span> * <span class="number">1024</span> ))              <span class="keyword">BYTES</span>,</span><br><span class="line">               <span class="keyword">Floor</span>(B.FREE / ( <span class="number">1024</span> * <span class="number">1024</span> ))               FREE,</span><br><span class="line">               <span class="keyword">Floor</span>(( A.BYTES - B.FREE ) / ( <span class="number">1024</span> * <span class="number">1024</span> )) USED</span><br><span class="line">        <span class="keyword">FROM</span>   (<span class="keyword">SELECT</span> TABLESPACE_NAME TABLESPACE_NAME,</span><br><span class="line">                       <span class="keyword">Sum</span>(<span class="keyword">BYTES</span>)      <span class="keyword">BYTES</span></span><br><span class="line">                <span class="keyword">FROM</span>   DBA_DATA_FILES</span><br><span class="line">                <span class="keyword">GROUP</span>  <span class="keyword">BY</span> TABLESPACE_NAME) A,</span><br><span class="line">               (<span class="keyword">SELECT</span> TABLESPACE_NAME TABLESPACE_NAME,</span><br><span class="line">                       <span class="keyword">Sum</span>(<span class="keyword">BYTES</span>)      FREE</span><br><span class="line">                <span class="keyword">FROM</span>   DBA_FREE_SPACE</span><br><span class="line">                <span class="keyword">GROUP</span>  <span class="keyword">BY</span> TABLESPACE_NAME) B</span><br><span class="line">        <span class="keyword">WHERE</span>  A.TABLESPACE_NAME = B.TABLESPACE_NAME)</span><br><span class="line"><span class="comment">--WHERE TABLESPACE_NAME LIKE 'CDR%' --这一句用于指定表空间名称</span></span><br><span class="line"><span class="keyword">ORDER</span>  <span class="keyword">BY</span> <span class="keyword">Floor</span>(<span class="number">10000</span> * USED / <span class="keyword">BYTES</span>) <span class="keyword">DESC</span>;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/.com//1.png" alt></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/07/Hexo%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpeg">
       <meta itemprop="name" content="殷勤">
-      <meta itemprop="description" content="普普通通的程序猿">
+      <meta itemprop="description" content="幺零二四程序猿">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="空间站">
+      <meta itemprop="name" content="幺零二四">
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
@@ -177,17 +251,23 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-05-07 11:41:29 / 修改时间：14:44:16" itemprop="dateCreated datePublished" datetime="2020-05-07T11:41:29+08:00">2020-05-07</time>
+              <time title="创建时间：2020-05-07 11:41:29" itemprop="dateCreated datePublished" datetime="2020-05-07T11:41:29+08:00">2020-05-07</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-05-08 15:32:47" itemprop="dateModified" datetime="2020-05-08T15:32:47+08:00">2020-05-08</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Hexo/" itemprop="url" rel="index"><span itemprop="name">Hexo</span></a>
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%A0%88/" itemprop="url" rel="index"><span itemprop="name">技术栈</span></a>
                 </span>
             </span>
 
@@ -204,6 +284,8 @@
       
           <p>搭建此博客教程：</p>
 <p><a href="https://zhuanlan.zhihu.com/p/102592286" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/102592286</a></p>
+<p>插入图片插件安装教程：</p>
+<p><a href="https://www.jianshu.com/p/f72aaad7b852" target="_blank" rel="noopener">https://www.jianshu.com/p/f72aaad7b852</a></p>
 <p>换电脑更新博客教程：</p>
 <p><a href="https://www.zhihu.com/question/21193762/answer/489124966" target="_blank" rel="noopener">https://www.zhihu.com/question/21193762/answer/489124966</a></p>
 <p>此处需注意，更换电脑拉下项目后，有几个插件的npm需要重新跑，因为上传git时被ignore。</p>
@@ -289,14 +371,14 @@
     <img class="site-author-image" itemprop="image" alt="殷勤"
       src="/images/avatar.jpeg">
   <p class="site-author-name" itemprop="name">殷勤</p>
-  <div class="site-description" itemprop="description">普普通通的程序猿</div>
+  <div class="site-description" itemprop="description">幺零二四程序猿</div>
 </div>
 <div class="site-state-wrap motion-element">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">1</span>
+          <span class="site-state-item-count">2</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -305,6 +387,12 @@
           
         <span class="site-state-item-count">1</span>
         <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
