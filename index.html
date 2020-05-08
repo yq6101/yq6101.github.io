@@ -184,16 +184,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-05-08 15:41:55 / 修改时间：16:16:12" itemprop="dateCreated datePublished" datetime="2020-05-08T15:41:55+08:00">2020-05-08</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%A0%88/" itemprop="url" rel="index"><span itemprop="name">技术栈</span></a>
-                </span>
+              <time title="创建时间：2020-05-08 16:19:14 / 修改时间：16:20:42" itemprop="dateCreated datePublished" datetime="2020-05-08T16:19:14+08:00">2020-05-08</time>
             </span>
 
           
@@ -207,9 +198,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="1、表空间容量查询"><a href="#1、表空间容量查询" class="headerlink" title="1、表空间容量查询"></a>1、表空间容量查询</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> TABLESPACE_NAME <span class="string">"表空间"</span>,</span><br><span class="line">       To_char(<span class="keyword">Round</span>(<span class="keyword">BYTES</span> / <span class="number">1024</span>, <span class="number">2</span>), <span class="string">'99990.00'</span>)</span><br><span class="line">       || <span class="string">''</span>           <span class="string">"实有"</span>,</span><br><span class="line">       To_char(<span class="keyword">Round</span>(FREE / <span class="number">1024</span>, <span class="number">2</span>), <span class="string">'99990.00'</span>)</span><br><span class="line">       || <span class="string">'G'</span>          <span class="string">"现有"</span>,</span><br><span class="line">       To_char(<span class="keyword">Round</span>(( <span class="keyword">BYTES</span> - FREE ) / <span class="number">1024</span>, <span class="number">2</span>), <span class="string">'99990.00'</span>)</span><br><span class="line">       || <span class="string">'G'</span>          <span class="string">"使用"</span>,</span><br><span class="line">       To_char(<span class="keyword">Round</span>(<span class="number">10000</span> * USED / <span class="keyword">BYTES</span>) / <span class="number">100</span>, <span class="string">'99990.00'</span>)</span><br><span class="line">       || <span class="string">'%'</span>          <span class="string">"比例"</span></span><br><span class="line"><span class="keyword">FROM</span>   (<span class="keyword">SELECT</span> A.TABLESPACE_NAME                             TABLESPACE_NAME,</span><br><span class="line">               <span class="keyword">Floor</span>(A.BYTES / ( <span class="number">1024</span> * <span class="number">1024</span> ))              <span class="keyword">BYTES</span>,</span><br><span class="line">               <span class="keyword">Floor</span>(B.FREE / ( <span class="number">1024</span> * <span class="number">1024</span> ))               FREE,</span><br><span class="line">               <span class="keyword">Floor</span>(( A.BYTES - B.FREE ) / ( <span class="number">1024</span> * <span class="number">1024</span> )) USED</span><br><span class="line">        <span class="keyword">FROM</span>   (<span class="keyword">SELECT</span> TABLESPACE_NAME TABLESPACE_NAME,</span><br><span class="line">                       <span class="keyword">Sum</span>(<span class="keyword">BYTES</span>)      <span class="keyword">BYTES</span></span><br><span class="line">                <span class="keyword">FROM</span>   DBA_DATA_FILES</span><br><span class="line">                <span class="keyword">GROUP</span>  <span class="keyword">BY</span> TABLESPACE_NAME) A,</span><br><span class="line">               (<span class="keyword">SELECT</span> TABLESPACE_NAME TABLESPACE_NAME,</span><br><span class="line">                       <span class="keyword">Sum</span>(<span class="keyword">BYTES</span>)      FREE</span><br><span class="line">                <span class="keyword">FROM</span>   DBA_FREE_SPACE</span><br><span class="line">                <span class="keyword">GROUP</span>  <span class="keyword">BY</span> TABLESPACE_NAME) B</span><br><span class="line">        <span class="keyword">WHERE</span>  A.TABLESPACE_NAME = B.TABLESPACE_NAME)</span><br><span class="line"><span class="comment">--WHERE TABLESPACE_NAME LIKE 'CDR%' --这一句用于指定表空间名称</span></span><br><span class="line"><span class="keyword">ORDER</span>  <span class="keyword">BY</span> <span class="keyword">Floor</span>(<span class="number">10000</span> * USED / <span class="keyword">BYTES</span>) <span class="keyword">DESC</span>;</span><br></pre></td></tr></table></figure>
-
-<p><img src="/Oracle%E8%A1%A8%E7%A9%BA%E9%97%B4%E6%89%A9%E5%AE%B9/1.png" alt></p>
+          <p><img src="/2020/05/08/Oracle%E8%A1%A8%E7%A9%BA%E9%97%B4%E6%89%A9%E5%AE%B9/photo.png" alt="Oracle表空间扩容"></p>
 
       
     </div>
@@ -392,7 +381,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">1</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
