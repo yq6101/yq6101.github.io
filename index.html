@@ -184,7 +184,16 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-05-08 16:19:14 / 修改时间：16:20:42" itemprop="dateCreated datePublished" datetime="2020-05-08T16:19:14+08:00">2020-05-08</time>
+              <time title="创建时间：2020-05-08 16:19:14 / 修改时间：17:01:09" itemprop="dateCreated datePublished" datetime="2020-05-08T16:19:14+08:00">2020-05-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%A0%88/" itemprop="url" rel="index"><span itemprop="name">技术栈</span></a>
+                </span>
             </span>
 
           
@@ -198,8 +207,19 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><img src="/2020/05/08/Oracle%E8%A1%A8%E7%A9%BA%E9%97%B4%E6%89%A9%E5%AE%B9/photo.png" alt="Oracle表空间扩容"></p>
+          <h2 id="1-表空间查询"><a href="#1-表空间查询" class="headerlink" title="1.表空间查询"></a>1.表空间查询</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> TABLESPACE_NAME <span class="string">"表空间"</span>,</span><br><span class="line">       To_char(<span class="keyword">Round</span>(<span class="keyword">BYTES</span> / <span class="number">1024</span>, <span class="number">2</span>), <span class="string">'99990.00'</span>)</span><br><span class="line">       || <span class="string">''</span>           <span class="string">"实有"</span>,</span><br><span class="line">       To_char(<span class="keyword">Round</span>(FREE / <span class="number">1024</span>, <span class="number">2</span>), <span class="string">'99990.00'</span>)</span><br><span class="line">       || <span class="string">'G'</span>          <span class="string">"现有"</span>,</span><br><span class="line">       To_char(<span class="keyword">Round</span>(( <span class="keyword">BYTES</span> - FREE ) / <span class="number">1024</span>, <span class="number">2</span>), <span class="string">'99990.00'</span>)</span><br><span class="line">       || <span class="string">'G'</span>          <span class="string">"使用"</span>,</span><br><span class="line">       To_char(<span class="keyword">Round</span>(<span class="number">10000</span> * USED / <span class="keyword">BYTES</span>) / <span class="number">100</span>, <span class="string">'99990.00'</span>)</span><br><span class="line">       || <span class="string">'%'</span>          <span class="string">"比例"</span></span><br><span class="line"><span class="keyword">FROM</span>   (<span class="keyword">SELECT</span> A.TABLESPACE_NAME                             TABLESPACE_NAME,</span><br><span class="line">               <span class="keyword">Floor</span>(A.BYTES / ( <span class="number">1024</span> * <span class="number">1024</span> ))              <span class="keyword">BYTES</span>,</span><br><span class="line">               <span class="keyword">Floor</span>(B.FREE / ( <span class="number">1024</span> * <span class="number">1024</span> ))               FREE,</span><br><span class="line">               <span class="keyword">Floor</span>(( A.BYTES - B.FREE ) / ( <span class="number">1024</span> * <span class="number">1024</span> )) USED</span><br><span class="line">        <span class="keyword">FROM</span>   (<span class="keyword">SELECT</span> TABLESPACE_NAME TABLESPACE_NAME,</span><br><span class="line">                       <span class="keyword">Sum</span>(<span class="keyword">BYTES</span>)      <span class="keyword">BYTES</span></span><br><span class="line">                <span class="keyword">FROM</span>   DBA_DATA_FILES</span><br><span class="line">                <span class="keyword">GROUP</span>  <span class="keyword">BY</span> TABLESPACE_NAME) A,</span><br><span class="line">               (<span class="keyword">SELECT</span> TABLESPACE_NAME TABLESPACE_NAME,</span><br><span class="line">                       <span class="keyword">Sum</span>(<span class="keyword">BYTES</span>)      FREE</span><br><span class="line">                <span class="keyword">FROM</span>   DBA_FREE_SPACE</span><br><span class="line">                <span class="keyword">GROUP</span>  <span class="keyword">BY</span> TABLESPACE_NAME) B</span><br><span class="line">        <span class="keyword">WHERE</span>  A.TABLESPACE_NAME = B.TABLESPACE_NAME)</span><br><span class="line"><span class="comment">--WHERE TABLESPACE_NAME LIKE 'CDR%' --这一句用于指定表空间名称</span></span><br><span class="line"><span class="keyword">ORDER</span>  <span class="keyword">BY</span> <span class="keyword">Floor</span>(<span class="number">10000</span> * USED / <span class="keyword">BYTES</span>) <span class="keyword">DESC</span>;</span><br></pre></td></tr></table></figure>
 
+
+
+<h2 id="2-查询数据文件路径以及对应表空间"><a href="#2-查询数据文件路径以及对应表空间" class="headerlink" title="2.查询数据文件路径以及对应表空间"></a>2.查询数据文件路径以及对应表空间</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> b.file_id　　文件<span class="keyword">ID</span>,</span><br><span class="line">　　b.tablespace_name　　表空间,</span><br><span class="line">　　b.file_name　　　　　物理文件名,</span><br><span class="line">　　b.bytes　　　　　　　总字节数,</span><br><span class="line">　　(b.bytes-<span class="keyword">sum</span>(nvl(a.bytes,<span class="number">0</span>)))　　　已使用,</span><br><span class="line">　　<span class="keyword">sum</span>(nvl(a.bytes,<span class="number">0</span>))　　　　　　　　剩余,</span><br><span class="line">　　<span class="keyword">sum</span>(nvl(a.bytes,<span class="number">0</span>))/(b.bytes)*<span class="number">100</span>　剩余百分比</span><br><span class="line">　　<span class="keyword">from</span> dba_free_space a,dba_data_files b</span><br><span class="line">　　<span class="keyword">where</span> a.file_id=b.file_id</span><br><span class="line">　　<span class="keyword">group</span> <span class="keyword">by</span> b.tablespace_name,b.file_name,b.file_id,b.bytes</span><br><span class="line">　　<span class="keyword">order</span> <span class="keyword">by</span> b.tablespace_name</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="3-三种扩容方式"><a href="#3-三种扩容方式" class="headerlink" title="3.三种扩容方式"></a>3.三种扩容方式</h2><h3 id="方式1：手工改变已存在数据文件的大小"><a href="#方式1：手工改变已存在数据文件的大小" class="headerlink" title="方式1：手工改变已存在数据文件的大小"></a>方式1：手工改变已存在数据文件的大小</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLESPACE</span> *** <span class="keyword">ADD</span> <span class="keyword">DATAFILE</span></span><br><span class="line"><span class="string">'\****\****.DBF'</span> <span class="keyword">SIZE</span> <span class="number">20480</span>M;</span><br></pre></td></tr></table></figure>
+
+<h3 id="方式2：允许已存在的数据文件自动增长"><a href="#方式2：允许已存在的数据文件自动增长" class="headerlink" title="方式2：允许已存在的数据文件自动增长"></a>方式2：允许已存在的数据文件自动增长</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">DATABASE</span> <span class="keyword">DATAFILE</span> <span class="string">'\****\****.DBF'</span></span><br><span class="line"><span class="keyword">AUTOEXTEND</span> <span class="keyword">ON</span> <span class="keyword">NEXT</span> <span class="number">100</span>M <span class="keyword">MAXSIZE</span> <span class="number">20480</span>M;</span><br></pre></td></tr></table></figure>
+
+<h3 id="方式3：增加数据文件"><a href="#方式3：增加数据文件" class="headerlink" title="方式3：增加数据文件"></a><strong>方式3：增加数据文件</strong></h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLESPACE</span> *** <span class="keyword">ADD</span> <span class="keyword">DATAFILE</span></span><br><span class="line"><span class="string">'\****\****.DBF'</span> </span><br><span class="line"><span class="keyword">size</span> <span class="number">7167</span>M <span class="keyword">autoextend</span> <span class="keyword">on</span> ;</span><br></pre></td></tr></table></figure>
       
     </div>
 
@@ -249,7 +269,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-05-08 15:32:47" itemprop="dateModified" datetime="2020-05-08T15:32:47+08:00">2020-05-08</time>
+                <time title="修改时间：2020-05-08 16:23:34" itemprop="dateModified" datetime="2020-05-08T16:23:34+08:00">2020-05-08</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -275,7 +295,7 @@
           <p>搭建此博客教程：</p>
 <p><a href="https://zhuanlan.zhihu.com/p/102592286" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/102592286</a></p>
 <p>插入图片插件安装教程：</p>
-<p><a href="https://www.jianshu.com/p/f72aaad7b852" target="_blank" rel="noopener">https://www.jianshu.com/p/f72aaad7b852</a></p>
+<p>&lt;<a href="https://www.jianshu.com/p/3db6a61d3782" target="_blank" rel="noopener">https://www.jianshu.com/p/3db6a61d3782</a>&gt;</p>
 <p>换电脑更新博客教程：</p>
 <p><a href="https://www.zhihu.com/question/21193762/answer/489124966" target="_blank" rel="noopener">https://www.zhihu.com/question/21193762/answer/489124966</a></p>
 <p>此处需注意，更换电脑拉下项目后，有几个插件的npm需要重新跑，因为上传git时被ignore。</p>
@@ -381,7 +401,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
