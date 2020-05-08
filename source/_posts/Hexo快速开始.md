@@ -1,7 +1,8 @@
 ---
 title: Hexo快速开始
 date: 2020-05-07 11:41:29
-categories: Hexo
+categories: 技术栈
+tags: Hexo
 ---
 
 
