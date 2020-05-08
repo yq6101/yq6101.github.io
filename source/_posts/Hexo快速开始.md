@@ -15,7 +15,7 @@ https://zhuanlan.zhihu.com/p/102592286
 
 插入图片插件安装教程：
 
-<<https://www.jianshu.com/p/3db6a61d3782>>
+<https://www.jianshu.com/p/3db6a61d3782>
 
 
 
