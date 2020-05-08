@@ -13,6 +13,12 @@ https://zhuanlan.zhihu.com/p/102592286
 
 
 
+插入图片插件安装教程：
+
+<<https://www.jianshu.com/p/3db6a61d3782>>
+
+
+
 换电脑更新博客教程：
 
 <https://www.zhihu.com/question/21193762/answer/489124966>
