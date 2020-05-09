@@ -159,6 +159,96 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yq6101.github.io/2020/05/09/%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91%E4%B9%8B%E6%95%B0%E6%8D%AE%E5%BA%93%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%AF%E5%88%A0%E4%B8%8E%E6%81%A2%E5%A4%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="殷勤">
+      <meta itemprop="description" content="幺零二四程序猿">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="幺零二四">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/05/09/%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91%E4%B9%8B%E6%95%B0%E6%8D%AE%E5%BA%93%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%AF%E5%88%A0%E4%B8%8E%E6%81%A2%E5%A4%8D/" class="post-title-link" itemprop="url">踩过的坑之数据库文件的误删与恢复</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-05-09 09:44:50 / 修改时间：10:19:17" itemprop="dateCreated datePublished" datetime="2020-05-09T09:44:50+08:00">2020-05-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91%E7%B3%BB%E5%88%97/" itemprop="url" rel="index"><span itemprop="name">踩过的坑系列</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="事发背景："><a href="#事发背景：" class="headerlink" title="事发背景："></a>事发背景：</h2><p>数据库需要扩容，执行新建数据文件时，由于粗心大意添加到了system下。</p>
+<p><img src="/2020/05/09/%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91%E4%B9%8B%E6%95%B0%E6%8D%AE%E5%BA%93%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%AF%E5%88%A0%E4%B8%8E%E6%81%A2%E5%A4%8D/01.png" alt="01"></p>
+<p>然后，我ssh进入该文件路径下直接删了这个文件。。。于是，第二天数据库登陆不上了，报错如下：</p>
+<p><img src="/2020/05/09/%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91%E4%B9%8B%E6%95%B0%E6%8D%AE%E5%BA%93%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%AF%E5%88%A0%E4%B8%8E%E6%81%A2%E5%A4%8D/02.png" alt></p>
+<h2 id="解决办法："><a href="#解决办法：" class="headerlink" title="解决办法："></a>解决办法：</h2><p>进入ssh,输入：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">sqlplus /NOLOG</span><br><span class="line"></span><br><span class="line">SQL&gt;connect sys/change_on_install as sysdba</span><br><span class="line"></span><br><span class="line">SQL&gt;shutdown normal        --这里注意如果数据库暂时没人在用可以直接shutdown immediate</span><br><span class="line">提示：</span><br><span class="line">数据库已经关闭</span><br><span class="line">已经卸载数据库</span><br><span class="line">ORACLE 例程已经关闭</span><br><span class="line"></span><br><span class="line">SQL&gt;startup mount</span><br><span class="line">提示：</span><br><span class="line">Total System Global Area 5110898688 bytes</span><br><span class="line">Fixed Size                  2806480 bytes</span><br><span class="line">Variable Size            1107299632 bytes</span><br><span class="line">Database Buffers        3992977408 bytes</span><br><span class="line">Redo Buffers                7815168 bytes</span><br><span class="line"></span><br><span class="line">SQL&gt;alter database open     --这一步出错了 提示我的数据文件18找不到了，因为我删除了。</span><br><span class="line"></span><br><span class="line">SQL&gt;alter database create datafile '/oradata/txybzuat/users09.dbf'; --重新创建这个文件</span><br><span class="line"></span><br><span class="line">SQL&gt;recover datafile '/oradata/txybzuat/users09.dbf';  --恢复这个文件</span><br><span class="line"></span><br><span class="line">SQL&gt;startup mount；  </span><br><span class="line"></span><br><span class="line">SQL&gt;alter database open;     --重新连接数据库即可</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="彩蛋："><a href="#彩蛋：" class="headerlink" title="彩蛋："></a>彩蛋：</h2><p>处理中不小心脱机(offline)了一个数据文件，很尴尬，导致同事一张表查不出来了，报错：</p>
+<p><img src="/2020/05/09/%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91%E4%B9%8B%E6%95%B0%E6%8D%AE%E5%BA%93%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%AF%E5%88%A0%E4%B8%8E%E6%81%A2%E5%A4%8D/03.png" alt></p>
+<p>是因为我执行了：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt;alter database datafile 8 offline drop；   --这里是本来要执行18，结果执行成了8。</span><br></pre></td></tr></table></figure>
+
+
+
+<p>解决方法：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt;select name,file#,status from v$datafile;  --查询所有数据文件状态，发现这个文件offline了。</span><br><span class="line"></span><br><span class="line">SQL&gt;recover datafile '/oradata/txybzuat/users04.dbf'; --恢复这个文件</span><br><span class="line"></span><br><span class="line">SQL&gt;alter database datafile 8 online；           --更改为online即可</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="参考链接："><a href="#参考链接：" class="headerlink" title="参考链接："></a>参考链接：</h2><p><a href="https://www.cnblogs.com/arxive/p/9012614.html" target="_blank" rel="noopener">https://www.cnblogs.com/arxive/p/9012614.html</a></p>
+<p><a href="http://blog.itpub.net/21256317/viewspace-1065042/" target="_blank" rel="noopener">http://blog.itpub.net/21256317/viewspace-1065042/</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yq6101.github.io/2020/05/08/Oracle%E8%A1%A8%E7%A9%BA%E9%97%B4%E6%89%A9%E5%AE%B9/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -182,10 +272,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-05-08 16:19:14 / 修改时间：17:01:09" itemprop="dateCreated datePublished" datetime="2020-05-08T16:19:14+08:00">2020-05-08</time>
+              <time title="创建时间：2020-05-08 16:19:14" itemprop="dateCreated datePublished" datetime="2020-05-08T16:19:14+08:00">2020-05-08</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-05-09 10:17:54" itemprop="dateModified" datetime="2020-05-09T10:17:54+08:00">2020-05-09</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -388,14 +484,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-count">3</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-count">2</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
